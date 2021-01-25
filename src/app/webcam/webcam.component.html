@@ -1,0 +1,13 @@
+<div class="container">
+    <video #videoElement class="video" [ngClass]="{'swapped': controls.swapped}"></video>
+
+
+<div class="controls">
+    <label>
+        <input type="checkbox" name="controls.swapped" [(ngModel)]="controls.swapped">
+        Swapped
+    </label>
+    
+</div>
+
+</div>

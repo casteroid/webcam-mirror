@@ -1,0 +1,26 @@
+.container {
+  width: 100%;
+  height: 100%;
+
+  .video {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+
+    &.swapped {
+      transform: rotateY(180deg);
+      -webkit-transform: rotateY(180deg);
+      /* Safari and Chrome */
+      -moz-transform: rotateY(180deg);
+      /* Firefox */
+    }
+  }
+
+  .controls {
+    z-index: 2;
+    position: absolute;
+  }
+}
