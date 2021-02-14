@@ -1,13 +1,39 @@
-<div class="container">
-    <video #videoElement class="video" [ngClass]="{'swapped': controls.swapped}"></video>
+<div class="container" [ngClass]="{'lights-on': lightsOn}">
 
+    <div class="video-container">
 
-<div class="controls">
-    <label>
-        <input type="checkbox" name="controls.swapped" [(ngModel)]="controls.swapped">
-        Swapped
-    </label>
-    
-</div>
+        <video #videoElement class="video" [ngClass]="{'swapped': swapped}"></video>
+
+        <div class="controls" [hidden]="!ready">
+            <label>
+                <input type="checkbox" name="swapped" [(ngModel)]="swapped">
+                Mirrored
+            </label>
+            <label>
+                <input type="checkbox" name="lightsOn" [(ngModel)]="lightsOn">
+                Lighs on
+            </label>
+
+            <div class="cameras" *ngIf="cameras.length > 0">
+
+                <select [(ngModel)]="selectedCamera" (change)="onCameraChange()">
+                    <option *ngFor="let device of cameras" [ngValue]="device" [selected]="device === selectedCamera">{{device.label}}</option>
+                </select>
+
+                <!--div *ngFor="let device of cameras">
+                    <button [ngClass]="{'selected': selectedCamera === device}" (click)="selectCamera(device)">
+                        <span [textContent]="device.label"></span>
+                    </button>
+                </div-->
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="video-error" *ngIf="error">
+        <span [textContent]="error"></span>
+    </div>
 
 </div>

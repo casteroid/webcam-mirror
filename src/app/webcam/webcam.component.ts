@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { from } from 'rxjs';
 
 
 @Component({
@@ -11,39 +12,99 @@ export class WebcamComponent implements OnInit {
   @ViewChild('videoElement') videoElement: any;
   video: any;
 
-  controls: any = {
-    swapped: true
-  };
+  swapped: boolean;
+  lightsOn: boolean;
+  ready: boolean;
 
-  constructor() { }
+  cameras: MediaDeviceInfo[];
+  selectedCamera: MediaDeviceInfo | undefined;
+  error: string | null;
+
+  private browser = <any>navigator;
+
+  constructor() {
+
+    this.swapped = true;
+    this.lightsOn = true;
+    this.ready = false;
+
+    this.cameras = [];
+    this.error = null;
+
+    this.start();
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.video = this.videoElement.nativeElement;
-    this.start();
+    this.video = this.videoElement?.nativeElement;
   }
 
-  start() {
-    this.initCamera({ video: true, audio: false });
+  private async start() {
+
+    try {
+      this.cameras = await this.getCameras();    
+      if (this.cameras.length > 0) {
+        this.selectCamera(this.cameras[0]);
+      }
+    } catch (err) {
+      this.error = err;
+      throw err;
+    }
+
   }
-  sound() {
-    this.initCamera({ video: true, audio: true });
+
+  onCameraChange() {
+    this.selectCamera(this.selectedCamera);
   }
 
-  async initCamera(config: any) {
-    var browser = <any>navigator;
+  private async selectCamera(deviceInfo?: MediaDeviceInfo) {
 
-    browser.getUserMedia = (browser.getUserMedia ||
-      browser.webkitGetUserMedia ||
-      browser.mozGetUserMedia ||
-      browser.msGetUserMedia);
+    if (!deviceInfo) {
+      return;
+    }
 
-    const stream: MediaStream = await browser.mediaDevices.getUserMedia(config);
+    this.selectedCamera = deviceInfo;
+    this.initCamera(this.selectedCamera.deviceId);
+  }
 
+  private async initCamera(deviceId: string) {
+
+    this.video = this.videoElement?.nativeElement;
+    if (!this.video) {
+      return;
+    }
+
+    const mediaConstraints = {
+      video: { deviceId },
+      audio: false
+    };
+
+    const stream: MediaStream = await this.browser.mediaDevices.getUserMedia(mediaConstraints);
     this.video.srcObject = stream;
     this.video.play();
+
+    this.ready = true;
+  }
+
+  private async getCameras() {
+
+    try {
+
+      // Need to request stream to initialize permissions
+      const mediaConstraints = { video: true, audio: false };
+      const stream = await this.browser.mediaDevices.getUserMedia(mediaConstraints);
+      console.log("stream", stream);
+
+      const mediaDevices: MediaDeviceInfo[] = await this.browser.mediaDevices.enumerateDevices();
+      const videoInputDevices = mediaDevices.filter(d => d.kind === "videoinput");
+
+      return videoInputDevices;
+    } catch (err) {
+      this.error = err;
+      throw err;
+    }
   }
 
 }
