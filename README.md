@@ -1,5 +1,11 @@
 # WebcamMirror
 
+A webapp to see yourself on camera.
+
+## Credits
+
+Icons made by [bqlqn](https://www.flaticon.com/authors/bqlq) from [www.flaticon.com](www.flaticon.com).
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.1.1.
 
 ## Development server
