@@ -8,12 +8,20 @@
 
             <div class="cameras" *ngIf="cameras.length > 1">
 
-                <select [(ngModel)]="selectedCamera" (change)="onCameraChange()">
+                <select class="cameras-options" [(ngModel)]="selectedCamera" (change)="onCameraChange()">
                     <option *ngFor="let device of cameras" [ngValue]="device" [selected]="device === selectedCamera">{{device.label}}</option>
                 </select>
 
             </div>
 
+        </div>
+
+        <div class="info">
+            <a title="https://github.com/nunofaria11/webcam-mirror"
+                href="https://github.com/nunofaria11/webcam-mirror"
+                target="_blank">
+                <img src="assets/github.png">
+            </a>
         </div>
 
     </div>
