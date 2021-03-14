@@ -1,5 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { from } from 'rxjs';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 
 @Component({
@@ -12,8 +11,6 @@ export class WebcamComponent implements OnInit {
   @ViewChild('videoElement') videoElement: any;
   video: any;
 
-  swapped: boolean;
-  lightsOn: boolean;
   ready: boolean;
 
   cameras: MediaDeviceInfo[];
@@ -22,10 +19,10 @@ export class WebcamComponent implements OnInit {
 
   private browser = <any>navigator;
 
+  private STORAGE_KEY = "webcam-mirror_options";
+
   constructor() {
 
-    this.swapped = true;
-    this.lightsOn = true;
     this.ready = false;
 
     this.cameras = [];
@@ -44,10 +41,25 @@ export class WebcamComponent implements OnInit {
   private async start() {
 
     try {
-      this.cameras = await this.getCameras();    
-      if (this.cameras.length > 0) {
-        this.selectCamera(this.cameras[0]);
+      this.cameras = await this.getCameras();
+
+      const { deviceId } = this.loadOptions();
+
+      let selectedCamera;
+      if (deviceId) {
+        selectedCamera = this.cameras.find(d => d.deviceId === deviceId);
       }
+
+      // Default camera
+      if (this.cameras.length > 0) {
+        selectedCamera = this.cameras[0];
+      }
+
+      if (selectedCamera) {
+        this.selectCamera(selectedCamera);
+      }
+
+
     } catch (err) {
       this.error = err;
       throw err;
@@ -67,6 +79,8 @@ export class WebcamComponent implements OnInit {
 
     this.selectedCamera = deviceInfo;
     this.initCamera(this.selectedCamera.deviceId);
+
+    this.saveOptions();
   }
 
   private async initCamera(deviceId: string) {
@@ -105,6 +119,27 @@ export class WebcamComponent implements OnInit {
       this.error = err;
       throw err;
     }
+  }
+
+  private saveOptions() {
+    const deviceId = this.selectedCamera?.deviceId;
+    const data = { deviceId };
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+    console.log("Saved data:", data);
+
+  }
+
+  private loadOptions(): { deviceId?: string } {
+    const data = localStorage.getItem(this.STORAGE_KEY);
+    if (data) {
+      const { deviceId } = JSON.parse(data);
+
+      const parsedData = { deviceId };
+      console.log("Loaded data:", parsedData);
+
+      return parsedData;
+    }
+    return {};
   }
 
 }
