@@ -51,7 +51,7 @@ export class WebcamComponent implements OnInit {
       }
 
       // Default camera
-      if (this.cameras.length > 0) {
+      if (!selectedCamera && this.cameras.length > 0) {
         selectedCamera = this.cameras[0];
       }
 
@@ -59,6 +59,7 @@ export class WebcamComponent implements OnInit {
         this.selectCamera(selectedCamera);
       }
 
+      throw new Error("No cameras found");
 
     } catch (err) {
       this.error = err;
