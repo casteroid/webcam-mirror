@@ -4,7 +4,7 @@ A webapp to see yourself on camera.
 
 ## Credits
 
-Icons made by [bqlqn](https://www.flaticon.com/authors/bqlq) from [www.flaticon.com](www.flaticon.com).
+Icons made by [bqlqn](https://www.flaticon.com/authors/bqlqn) from [www.flaticon.com](www.flaticon.com).
 
 ---
 
