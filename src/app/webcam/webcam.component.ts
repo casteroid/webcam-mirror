@@ -57,9 +57,9 @@ export class WebcamComponent implements OnInit {
 
       if (selectedCamera) {
         this.selectCamera(selectedCamera);
+      } else {
+        throw new Error("No cameras found");
       }
-
-      throw new Error("No cameras found");
 
     } catch (err) {
       this.error = err;
@@ -70,6 +70,7 @@ export class WebcamComponent implements OnInit {
 
   onCameraChange() {
     this.selectCamera(this.selectedCamera);
+    this.saveOptions();
   }
 
   private async selectCamera(deviceInfo?: MediaDeviceInfo) {
@@ -80,8 +81,6 @@ export class WebcamComponent implements OnInit {
 
     this.selectedCamera = deviceInfo;
     this.initCamera(this.selectedCamera.deviceId);
-
-    this.saveOptions();
   }
 
   private async initCamera(deviceId: string) {
@@ -126,21 +125,16 @@ export class WebcamComponent implements OnInit {
     const deviceId = this.selectedCamera?.deviceId;
     const data = { deviceId };
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
-    console.log("Saved data:", data);
 
   }
 
   private loadOptions(): { deviceId?: string } {
     const data = localStorage.getItem(this.STORAGE_KEY);
-    if (data) {
-      const { deviceId } = JSON.parse(data);
-
-      const parsedData = { deviceId };
-      console.log("Loaded data:", parsedData);
-
-      return parsedData;
+    if (!data) {
+      return {};
     }
-    return {};
+    const { deviceId } = JSON.parse(data);
+    return { deviceId };
   }
 
 }
