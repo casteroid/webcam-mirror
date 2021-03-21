@@ -1,5 +1,7 @@
 # Webcam Mirror
 
+![Webcam Mirror](icons/hand-mirror.png "Webcam Mirror")
+
 A webapp to see yourself on camera.
 
 ## Credits
