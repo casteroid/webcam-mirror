@@ -15,7 +15,7 @@ export class WebcamComponent implements OnInit {
 
   cameras: MediaDeviceInfo[];
   selectedCamera: MediaDeviceInfo | undefined;
-  error: string | null;
+  error: any | null;
 
   private browser = <any>navigator;
 
