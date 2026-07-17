@@ -8,9 +8,9 @@
 
       @if (cameras.length > 1) {
         <div class="cameras">
-          <select class="cameras-options" [(ngModel)]="selectedCamera" (change)="onCameraChange()">
+          <select class="cameras-options" [ngModel]="selectedCamera" (ngModelChange)="onCameraChange($event)">
             @for (device of cameras; track device) {
-              <option [ngValue]="device" [selected]="device === selectedCamera">{{device.label}}</option>
+              <option [ngValue]="device">{{device.label}}</option>
             }
           </select>
         </div>
