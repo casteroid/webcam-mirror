@@ -70,8 +70,9 @@ export class WebcamComponent implements OnInit, AfterViewInit {
 
   }
 
-  onCameraChange() {
-    this.selectCamera(this.selectedCamera);
+  onCameraChange(device: MediaDeviceInfo) {
+    this.selectedCamera = device;
+    this.selectCamera(device);
     this.saveOptions();
   }
 
@@ -92,8 +93,14 @@ export class WebcamComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    // Stop old stream tracks before switching
+    const oldStream: MediaStream = this.video.srcObject;
+    if (oldStream) {
+      oldStream.getTracks().forEach(track => track.stop());
+    }
+
     const mediaConstraints = {
-      video: { deviceId },
+      video: { deviceId: { exact: deviceId } },
       audio: false
     };
 
