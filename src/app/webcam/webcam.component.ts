@@ -100,7 +100,12 @@ export class WebcamComponent implements OnInit, AfterViewInit {
     }
 
     const mediaConstraints = {
-      video: { deviceId: { exact: deviceId } },
+      video: {
+        deviceId: { exact: deviceId },
+        width: { ideal: 1920 },
+        height: { ideal: 1080 },
+        frameRate: { ideal: 60 }
+      },
       audio: false
     };
 
@@ -116,7 +121,14 @@ export class WebcamComponent implements OnInit, AfterViewInit {
     try {
 
       // Need to request stream to initialize permissions
-      const mediaConstraints = { video: true, audio: false };
+      const mediaConstraints = {
+        video: {
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
+          frameRate: { ideal: 30 }
+        },
+        audio: false
+      };
       const stream = await this.browser.mediaDevices.getUserMedia(mediaConstraints);
       console.log("stream", stream);
 
