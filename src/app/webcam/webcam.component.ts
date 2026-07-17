@@ -1,12 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 
 @Component({
-  selector: 'app-webcam',
-  templateUrl: './webcam.component.html',
-  styleUrls: ['./webcam.component.scss']
+    selector: 'app-webcam',
+    templateUrl: './webcam.component.html',
+    styleUrls: ['./webcam.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
-export class WebcamComponent implements OnInit {
+export class WebcamComponent implements OnInit, AfterViewInit {
 
   @ViewChild('videoElement') videoElement: any;
   video: any;
@@ -17,7 +19,7 @@ export class WebcamComponent implements OnInit {
   selectedCamera: MediaDeviceInfo | undefined;
   error: any | null;
 
-  private browser = <any>navigator;
+  private browser = navigator as any;
 
   private STORAGE_KEY = "webcam-mirror_options";
 

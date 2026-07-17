@@ -1,33 +1,37 @@
 <div class="container">
 
-    <div class="video-container">
+  <div class="video-container">
 
-        <video #videoElement class="video swapped"></video>
+    <video #videoElement class="video swapped"></video>
 
-        <div class="controls" [hidden]="!ready">
+    <div class="controls" [hidden]="!ready">
 
-            <div class="cameras" *ngIf="cameras.length > 1">
-
-                <select class="cameras-options" [(ngModel)]="selectedCamera" (change)="onCameraChange()">
-                    <option *ngFor="let device of cameras" [ngValue]="device" [selected]="device === selectedCamera">{{device.label}}</option>
-                </select>
-
-            </div>
-
+      @if (cameras.length > 1) {
+        <div class="cameras">
+          <select class="cameras-options" [(ngModel)]="selectedCamera" (change)="onCameraChange()">
+            @for (device of cameras; track device) {
+              <option [ngValue]="device" [selected]="device === selectedCamera">{{device.label}}</option>
+            }
+          </select>
         </div>
-
-        <div class="info">
-            <a title="https://github.com/nunofaria11/webcam-mirror"
-                href="https://github.com/nunofaria11/webcam-mirror"
-                target="_blank">
-                <img src="assets/github.png">
-            </a>
-        </div>
+      }
 
     </div>
 
-    <div class="video-error" *ngIf="error">
-        <span [textContent]="error"></span>
+    <div class="info">
+      <a title="https://github.com/nunofaria11/webcam-mirror"
+        href="https://github.com/nunofaria11/webcam-mirror"
+        target="_blank">
+        <img src="assets/github.png" alt="GitHub repository">
+      </a>
     </div>
+
+  </div>
+
+  @if (error) {
+    <div class="video-error">
+      <span [textContent]="error"></span>
+    </div>
+  }
 
 </div>
